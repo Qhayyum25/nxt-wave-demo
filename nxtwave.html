@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NxtWave AI Workshop | Build Your First AI Project in 60 Minutes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #0a0518;
+      --card-bg: rgba(28, 14, 56, 0.78);
+      --card-border: rgba(168, 85, 247, 0.25);
+      --primary-purple: #9333ea;
+      --primary-glow: #a855f7;
+      --accent-lilac: #d8b4fe;
+      --text-main: #ffffff;
+      --text-muted: #9f96b5;
+      --glass-btn: rgba(255, 255, 255, 0.08);
+      --glass-btn-border: rgba(255, 255, 255, 0.16);
+      --code-bg: rgba(8, 4, 18, 0.95);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+      position: relative;
+    }
+
+    /* Ambient Glowing Blobs */
+    .glow-blob-1 {
+      position: fixed;
+      top: -120px;
+      left: 10%;
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, rgba(147, 51, 234, 0.32) 0%, rgba(10, 5, 24, 0) 70%);
+      filter: blur(90px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glow-blob-2 {
+      position: fixed;
+      bottom: 20px;
+      right: 10%;
+      width: 620px;
+      height: 620px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.28) 0%, rgba(10, 5, 24, 0) 70%);
+      filter: blur(100px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Sticky Main Navigation Header */
+    .nav-container {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 24px;
+    }
+
+    .nav-inner {
+      background: rgba(24, 12, 48, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .brand-logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-logo span {
+      color: var(--accent-lilac);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(216, 180, 254, 0.6);
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+      color: #fff;
+      padding: 9px 22px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(168, 85, 247, 0.45);
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(168, 85, 247, 0.7);
+    }
+
+    /* Main Container (Synthwave Card Structure) */
+    .app-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1100px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.12) inset;
+      padding: 40px 48px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      padding: 20px 10px 45px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(168, 85, 247, 0.14);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      padding: 7px 20px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-lilac);
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+    }
+
+    .hero-title {
+      font-size: 3.6rem;
+      line-height: 1.12;
+      font-weight: 800;
+      letter-spacing: -1.8px;
+      margin-bottom: 22px;
+      background: linear-gradient(180deg, #FFFFFF 20%, #d8b4fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 860px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 660px;
+      margin-bottom: 38px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+      color: #fff;
+      padding: 15px 36px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(168, 85, 247, 0.45);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(168, 85, 247, 0.65);
+    }
+
+    .btn-secondary {
+      background: var(--glass-btn);
+      border: 1px solid var(--glass-btn-border);
+      color: #fff;
+      padding: 15px 32px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 36px;
+      text-align: center;
+    }
+
+    .stat-item h3 {
+      font-size: 2.7rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .stat-item p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Structured Section Anchors with Scroll Offset */
+    .content-section {
+      scroll-margin-top: 100px;
+      background: rgba(18, 9, 38, 0.75);
+      border: 1px solid rgba(168, 85, 247, 0.22);
+      border-radius: 24px;
+      padding: 38px;
+      margin-top: 48px;
+      transition: border-color 0.3s ease;
+    }
+
+    .content-section:hover {
+      border-color: rgba(168, 85, 247, 0.45);
+    }
+
+    .section-header-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent-lilac);
+      background: rgba(168, 85, 247, 0.15);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      max-width: 800px;
+    }
+
+    /* Section 1: Branch AI Tool Styles */
+    .branch-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .branch-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ccc;
+      padding: 11px 22px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.2s;
+    }
+
+    .branch-btn.active, .branch-btn:hover {
+      background: var(--primary-purple);
+      color: #fff;
+      border-color: var(--primary-glow);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.4);
+    }
+
+    .project-card-container {
+      background: rgba(10, 5, 24, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 20px;
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
+    }
+
+    .code-preview {
+      background: var(--code-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 18px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: #d8b4fe;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    .code-preview pre {
+      font-family: inherit;
+    }
+
+    .interview-q-box {
+      background: rgba(168, 85, 247, 0.08);
+      border-left: 3px solid #a855f7;
+      padding: 14px 18px;
+      border-radius: 0 12px 12px 0;
+      margin-top: 18px;
+    }
+
+    .interview-q-box h5 {
+      color: #fff;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .interview-q-box p {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    /* Section 2: 60-Min Curriculum Timeline */
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .timeline-card {
+      background: rgba(10, 5, 24, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .timeline-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary-glow);
+    }
+
+    .time-badge {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #a855f7;
+      background: rgba(168, 85, 247, 0.12);
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .deliverable-tag {
+      font-size: 0.75rem;
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 12px;
+      font-weight: 600;
+    }
+
+    /* Section 3: Referrals Gamified Tiers */
+    .referral-tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .tier-card {
+      background: rgba(10, 5, 24, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .tier-card.active-tier {
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, 0.1);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
+    }
+
+    .tier-card h4 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .tier-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .referral-share-box {
+      background: rgba(10, 5, 24, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 18px;
+      padding: 26px;
+      text-align: center;
+    }
+
+    .referral-input-wrapper {
+      display: flex;
+      max-width: 550px;
+      margin: 0 auto 16px;
+      gap: 10px;
+    }
+
+    .referral-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 12px 18px;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .btn-copy {
+      background: var(--primary-purple);
+      border: none;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 13px 30px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
+      transition: transform 0.2s;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Section 4: Growth Plan Interactive Tabs */
+    .strategy-tabs-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #a855f7;
+      color: #fff;
+      border-color: #a855f7;
+    }
+
+    .tab-content {
+      background: rgba(10, 5, 24, 0.9);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 18px;
+      padding: 28px;
+      min-height: 220px;
+    }
+
+    /* Registration Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: #14092b;
+      border: 1px solid var(--primary-glow);
+      border-radius: 24px;
+      width: 90%;
+      max-width: 480px;
+      padding: 34px;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      color: #aaa;
+      font-size: 1.5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary-glow);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+    }
+
+    @media (max-width: 850px) {
+      .app-card {
+        padding: 24px 20px;
+      }
+      .hero-title {
+        font-size: 2.3rem;
+      }
+      .project-card-container {
+        grid-template-columns: 1fr;
+      }
+      .referral-tiers-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .stats-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient glowing lighting -->
+  <div class="glow-blob-1"></div>
+  <div class="glow-blob-2"></div>
+
+  <!-- Sticky Navbar with Direct Anchor Jump -->
+  <div class="nav-container">
+    <nav class="nav-inner">
+      <a href="#" class="brand-logo">NxtWave<span>.ai</span></a>
+      <ul class="nav-links">
+        <li><a onclick="navigateTo('branch-tool')">Branch AI Tool</a></li>
+        <li><a onclick="navigateTo('agenda-section')">60-Min Agenda</a></li>
+        <li><a onclick="navigateTo('referral-engine')">Referrals</a></li>
+        <li><a onclick="navigateTo('growth-strategy')">Growth Plan</a></li>
+      </ul>
+      <button class="nav-btn" onclick="openModal()">Register Free</button>
+    </nav>
+  </div>
+
+  <!-- Main Synthwave Canvas Card -->
+  <div class="app-card">
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="pill-badge">
+        ✨ 500-Seat Placement Sprint: Live AI Build
+      </div>
+
+      <h1 class="hero-title">Build Your First AI Project In 60 Minutes</h1>
+
+      <p class="hero-subtitle">
+        Zero prior coding experience required. Transform your final-year resume with a live, deployed generative AI application before campus placements begin.
+      </p>
+
+      <div class="cta-group">
+        <button class="btn-primary" onclick="openModal()">
+          Claim Your Free Seat 🚀
+        </button>
+        <button class="btn-secondary" onclick="navigateTo('branch-tool')">
+          Explore AI Project Ideas ⚡
+        </button>
+      </div>
+
+      <!-- Stats Bar Matching Screenshot -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <h3 id="seatCounter">418 / 500</h3>
+          <p>Seats Reserved</p>
+        </div>
+        <div class="stat-item">
+          <h3>60 Mins</h3>
+          <p>Hands-On Live Build</p>
+        </div>
+        <div class="stat-item">
+          <h3>₹0 (Free)</h3>
+          <p>Verified Certificate</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: BRANCH AI TOOL -->
+    <section class="content-section" id="branch-tool">
+      <span class="section-header-tag">Interactive Working Asset</span>
+      <h2 class="section-title">1. Branch AI Project Generator</h2>
+      <p class="section-desc">
+        Final-year recruiters test practical implementation, not theoretical definitions. Select your engineering branch below to see the exact application you will code live, the Python starter code, and verified ATS resume bullet points.
+      </p>
+
+      <div class="branch-pills">
+        <button class="branch-btn active" onclick="switchBranch('cse')">💻 CSE / IT</button>
+        <button class="branch-btn" onclick="switchBranch('ece')">📡 ECE / Telecom</button>
+        <button class="branch-btn" onclick="switchBranch('mech')">⚙️ Mechanical</button>
+        <button class="branch-btn" onclick="switchBranch('civil')">🏗️ Civil Engineering</button>
+        <button class="branch-btn" onclick="switchBranch('eee')">⚡ Electrical (EEE)</button>
+      </div>
+
+      <div class="project-card-container">
+        <div>
+          <span id="projStack" style="display:inline-block; background:rgba(168,85,247,0.2); color:#d8b4fe; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:6px; margin-bottom:12px;"></span>
+          <h3 id="projTitle" style="color:#fff; font-size:1.35rem; margin-bottom:12px;"></h3>
+          <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:14px;">Pre-Formatted ATS Resume Bullets (Ready to copy):</p>
+          <ul id="projBullets" style="list-style:none; display:flex; flex-direction:column; gap:8px;"></ul>
+
+          <div class="interview-q-box">
+            <h5>🎯 Placement Interview Edge:</h5>
+            <p id="projInterviewQ"></p>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="color:#aaa; font-size:0.8rem; font-family:'Fira Code', monospace;">starter_pipeline.py</span>
+            <span style="color:#22c55e; font-size:0.75rem; font-weight:700;">● Live Cloud Endpoint</span>
+          </div>
+          <div class="code-preview">
+            <pre><code id="projCode"></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: 60-MIN AGENDA -->
+    <section class="content-section" id="agenda-section">
+      <span class="section-header-tag">Structured Roadmap</span>
+      <h2 class="section-title">2. The 60-Minute Master Agenda</h2>
+      <p class="section-desc">
+        No boring slide decks or 2-hour theory dumps. In 60 structured minutes, you will build, test, and deploy a live working application directly onto the cloud.
+      </p>
+
+      <div class="timeline-grid">
+        <div class="timeline-card">
+          <span class="time-badge">MIN 00 - 15</span>
+          <h4 style="color:#fff; margin-bottom:8px;">API Authentication & Core LLM Setup</h4>
+          <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5;">
+            Demystify tokens, prompt architecture, and get your free Google Gemini API key. Write your first 4 lines of Python to ping an LLM.
+          </p>
+          <span class="deliverable-tag">Deliverable: Working API connection</span>
+        </div>
+
+        <div class="timeline-card">
+          <span class="time-badge">MIN 15 - 35</span>
+          <h4 style="color:#fff; margin-bottom:8px;">Application Logic & Prompt Chaining</h4>
+          <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5;">
+            Implement multi-modal processing (parsing text + images/PDFs), system instructions, and deterministic temperature controls.
+          </p>
+          <span class="deliverable-tag">Deliverable: Backend logic validated</span>
+        </div>
+
+        <div class="timeline-card">
+          <span class="time-badge">MIN 35 - 50</span>
+          <h4 style="color:#fff; margin-bottom:8px;">Modern Web Dashboard with Streamlit</h4>
+          <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5;">
+            Wrap your AI logic in an interactive web dashboard with file uploaders, real-time response streaming, and dark-mode styling.
+          </p>
+          <span class="deliverable-tag">Deliverable: Interactive UI on Localhost</span>
+        </div>
+
+        <div class="timeline-card">
+          <span class="time-badge">MIN 50 - 60</span>
+          <h4 style="color:#fff; margin-bottom:8px;">Public Cloud Deployment & GitHub Push</h4>
+          <p style="color:var(--text-muted); font-size:0.85rem; line-height:1.5;">
+            Deploy your code to a live public URL (e.g. <code>yourapp.streamlit.app</code>). Receive your verifiable workshop credential.
+          </p>
+          <span class="deliverable-tag">Deliverable: Live URL for your Resume</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px; display:flex; justify-content:space-around; flex-wrap:wrap; gap:16px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">💻</span>
+          <div style="font-size:0.85rem;"><strong style="color:#fff;">Prerequisites:</strong> Laptop + Browser (No GPU needed)</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">📜</span>
+          <div style="font-size:0.85rem;"><strong style="color:#fff;">Certification:</strong> Verified NxtWave Certificate of Build</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.4rem;">💼</span>
+          <div style="font-size:0.85rem;"><strong style="color:#fff;">Resume Output:</strong> 3 Interview-tested technical bullets</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: REFERRALS -->
+    <section class="content-section" id="referral-engine">
+      <span class="section-header-tag">Viral Peer Loop</span>
+      <h2 class="section-title">3. Gamified Campus Referral Engine</h2>
+      <p class="section-desc">
+        Engineered to drive exponential viral loops without relying on expensive ad spend. Every student who registers unlocks higher-tier rewards by inviting their hostel and college batchmates.
+      </p>
+
+      <div class="referral-tiers-grid">
+        <div class="tier-card" id="tier1Card">
+          <div style="font-size:1.8rem; margin-bottom:6px;">📘</div>
+          <h4>Level 1: 1 Friend</h4>
+          <p>Instantly unlock the <strong>Top 50 GenAI Placement Q&A PDF</strong> (Technical interview answers).</p>
+        </div>
+
+        <div class="tier-card active-tier" id="tier2Card">
+          <div style="font-size:1.8rem; margin-bottom:6px;">🚀</div>
+          <h4>Level 2: 3 Friends</h4>
+          <p>Unlock the <strong>ATS Resume Template</strong> + GitHub Repo boilerplate with live deployment scripts.</p>
+        </div>
+
+        <div class="tier-card" id="tier3Card">
+          <div style="font-size:1.8rem; margin-bottom:6px;">🏆</div>
+          <h4>Level 3: 5 Friends</h4>
+          <p>Direct entry into the <strong>₹1,000 Amazon Gift Voucher Pool</strong> + 1-on-1 Q&A with the mentor.</p>
+        </div>
+      </div>
+
+      <div class="referral-share-box">
+        <h4 style="color:#fff; font-size:1.15rem; margin-bottom:12px;">Your Personal Campus Invite Link</h4>
+        <div class="referral-input-wrapper">
+          <input type="text" id="refInput" class="referral-input" readonly value="https://nxtwave.ai/workshop?ref=CAMPUS-HERO-2025">
+          <button class="btn-copy" onclick="copyReferralLink()">Copy Link</button>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
+          <a id="waShare" href="#" target="_blank" class="btn-whatsapp">
+            Share in College WhatsApp Group (1-Click Forward) 💬
+          </a>
+          <button class="btn-secondary" onclick="simulateFriendJoined()" style="padding:10px 22px; font-size:0.9rem;">
+            ⚡ Test: Simulate Friend Joining
+          </button>
+        </div>
+
+        <p style="color:var(--text-muted); font-size:0.85rem;">
+          🔥 <strong>Current Referral Count:</strong> <span id="refCounterText" style="color:#d8b4fe; font-weight:800;">3 Friends Joined</span> (Level 2 Perks Active)
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 4: GROWTH PLAN -->
+    <section class="content-section" id="growth-strategy">
+      <span class="section-header-tag">Executive Strategy (2 Pages / 5 Slides)</span>
+      <h2 class="section-title">4. The NxtWave Growth Intern Campaign Plan</h2>
+      <p class="section-desc">
+        How to acquire 500 final-year engineering students in 7 days on a strict ₹2,000 budget with a blended CAC of ₹4.00 per student. Click the tabs below to inspect the strategy details.
+      </p>
+
+      <div class="strategy-tabs-nav">
+        <button class="tab-btn active" onclick="openTab('tab1', this)">1. Student Psychology & Pain Points</button>
+        <button class="tab-btn" onclick="openTab('tab2', this)">2. Channel Prioritization & 7-Day Sprint</button>
+        <button class="tab-btn" onclick="openTab('tab3', this)">3. ₹2,000 Budget & CAC Math</button>
+        <button class="tab-btn" onclick="openTab('tab4', this)">4. What I Deliberately Rejected</button>
+      </div>
+
+      <div class="tab-content" id="tabContentArea">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Registration Modal -->
+  <div class="modal-backdrop" id="regModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <h3 style="font-size:1.45rem; color:#fff; margin-bottom:6px;">Claim Your Free Seat</h3>
+      <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;">
+        Only <span style="color:#a855f7; font-weight:800;">82 seats left</span> for this 60-minute cohort.
+      </p>
+
+      <form onsubmit="handleRegistration(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" class="form-input" required placeholder="e.g. Rahul Sharma">
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Number (For Workshop Link)</label>
+          <input type="tel" class="form-input" required placeholder="e.g. 9876543210">
+        </div>
+        <div class="form-group">
+          <label>College & Engineering Branch</label>
+          <input type="text" class="form-input" required placeholder="e.g. SRM Chennai - ECE">
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center; margin-top:10px;">
+          Confirm Free Registration (₹0)
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 1. Navigation Controller (Smooth Scroll + Target Flash)
+    function navigateTo(elementId) {
+      const target = document.getElementById(elementId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Highlight effect
+        target.style.borderColor = '#a855f7';
+        target.style.boxShadow = '0 0 35px rgba(168, 85, 247, 0.4)';
+        setTimeout(() => {
+          target.style.borderColor = 'rgba(168, 85, 247, 0.22)';
+          target.style.boxShadow = 'none';
+        }, 1500);
+      }
+    }
+
+    // 2. Branch Project Database
+    const branchData = {
+      cse: {
+        title: "Multi-Modal Code Explainer & Automated Bug Fixer",
+        stack: "Python • Google Gemini Flash • Streamlit Cloud",
+        bullets: [
+          "Architected an interactive developer assistant using LLM prompt-chaining to analyze ASTs and debug code in real-time.",
+          "Integrated Gemini Vision API to convert white-board system architecture diagrams into boilerplate code in <3 seconds.",
+          "Deployed live containerized app with a public endpoint, achieving 99.8% test response accuracy."
+        ],
+        interviewQ: "How did you handle token context windows and rate limits when passing multi-file repositories to the Gemini API?",
+        code: `import streamlit as st
+import google.generativeai as genai
+
+genai.configure(api_key=st.secrets["GEMINI_KEY"])
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+st.title("AI Code Debugger & Explainer")
+code_input = st.text_area("Paste Python Code:")
+
+if st.button("Analyze & Fix Bugs"):
+    prompt = f"Identify syntax bugs and optimize this code:\\n{code_input}"
+    response = model.generate_content(prompt)
+    st.markdown(response.text)`
+      },
+      ece: {
+        title: "Edge-AI Smart Signal Anomaly Detector & Reporter",
+        stack: "MicroPython / Python • Edge AI API • FastDashboard",
+        bullets: [
+          "Developed an AI pipeline capable of interpreting sensor telemetry patterns and detecting faulty frequency spikes.",
+          "Leveraged lightweight LLM embeddings for automated root-cause failure summarization sent via Webhook.",
+          "Enhanced signal diagnosis speed by 4x compared to manual threshold scripts."
+        ],
+        interviewQ: "Why did you choose an API-first LLM approach over running a quantized model directly on an ESP32 microcontroller?",
+        code: `import google.generativeai as genai
+
+def analyze_telemetry(sensor_stream):
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    prompt = f"Analyze sensor voltage fluctuations: {sensor_stream}. Flag anomalies."
+    return model.generate_content(prompt).text`
+      },
+      mech: {
+        title: "Generative AI CAD Spec & Predictive Maintenance Analyzer",
+        stack: "Python • LLM RAG • Streamlit",
+        bullets: [
+          "Constructed an intelligent spec-sheet extractor analyzing mechanical stress tolerance documents with zero manual lookup.",
+          "Implemented semantic search over maintenance manuals to output immediate corrective SOPs for factory technicians.",
+          "Engineered interactive UI allowing engineers to query machine health via natural language."
+        ],
+        interviewQ: "How does semantic chunking improve retrieval accuracy for complex mechanical tolerancing tables?",
+        code: `import streamlit as st
+import google.generativeai as genai
+
+st.title("Predictive Maintenance AI")
+manual_query = st.text_input("Enter Turbine Vibration Reading:")
+if manual_query:
+    response = genai.GenerativeModel("gemini-1.5-flash").generate_content(manual_query)
+    st.write(response.text)`
+      },
+      civil: {
+        title: "AI Site Safety & Structural Defect Classification Bot",
+        stack: "Vision AI • Python • Webhook Integration",
+        bullets: [
+          "Automated structural crack assessment by processing site inspection images using multimodal computer vision.",
+          "Generates instantaneous OSHA-compliant hazard reports formatted for field supervisors in under 60 seconds.",
+          "Featured automated risk estimation scoring for municipal infrastructure review."
+        ],
+        interviewQ: "How did you prevent hallucinations when classifying structural crack severity from drone photos?",
+        code: `from PIL import Image
+import google.generativeai as genai
+
+img = Image.open("site_crack.jpg")
+model = genai.GenerativeModel("gemini-1.5-flash")
+res = model.generate_content(["Classify concrete crack severity (mm) and OSHA hazard level:", img])
+print(res.text)`
+      },
+      eee: {
+        title: "AI Smart Grid Energy Load Predictor & Optimization Assistant",
+        stack: "Python • Time-Series Forecast • Generative Insights",
+        bullets: [
+          "Built a smart power consumption assistant forecasting peak demand loads based on weather and grid metrics.",
+          "Created an automated natural language reporting layer explaining peak cost mitigation strategies.",
+          "Successfully deployed prototype dashboard during campus technical symposium."
+        ],
+        interviewQ: "What are the trade-offs between traditional ARIMA time-series models and LLM contextual forecasting?",
+        code: `import google.generativeai as genai
+
+def power_load_advisor(peak_kw, temp_c):
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    prompt = f"Grid peak: {peak_kw}kW, Temp: {temp_c}C. Recommend load shedding schedule."
+    return model.generate_content(prompt).text`
+      }
+    };
+
+    function switchBranch(key) {
+      document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const data = branchData[key];
+      document.getElementById('projStack').innerText = data.stack;
+      document.getElementById('projTitle').innerText = data.title;
+      document.getElementById('projInterviewQ').innerText = data.interviewQ;
+      document.getElementById('projCode').innerText = data.code;
+
+      const bulletsContainer = document.getElementById('projBullets');
+      bulletsContainer.innerHTML = data.bullets.map(b => `<li style="color:#e2e8f0; font-size:0.88rem; display:flex; gap:8px; line-height:1.45;"><span style="color:#a855f7; font-weight:bold;">✔</span> ${b}</li>`).join('');
+    }
+
+    // 3. Referral Simulation & WhatsApp Share Link
+    let currentReferrals = 3;
+    function simulateFriendJoined() {
+      currentReferrals++;
+      document.getElementById('refCounterText').innerText = `${currentReferrals} Friends Joined (Level ${currentReferrals >= 5 ? 3 : 2} Active!)`;
+      if (currentReferrals >= 5) {
+        document.getElementById('tier3Card').classList.add('active-tier');
+        alert("🎉 Level 3 Unlocked! You are now entered into the ₹1,000 Amazon Voucher Pool!");
+      } else {
+        alert(`🎉 A batchmate registered using your link! Total: ${currentReferrals}`);
+      }
+    }
+
+    function copyReferralLink() {
+      const field = document.getElementById('refInput');
+      field.select();
+      navigator.clipboard.writeText(field.value);
+      alert("📋 Referral link copied to clipboard! Paste it into your college WhatsApp groups!");
+    }
+
+    // 4. Growth Strategy Tab Content
+    const strategyTabs = {
+      tab1: `
+        <h4 style="color:#d8b4fe; margin-bottom:8px; font-size:1.15rem;">🎯 Understanding the Final-Year Student Persona</h4>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:12px;">
+          • <strong>The Core Bottleneck (FODP - Fear Of Displacement):</strong> Final-year engineering students across Tier-2/3 colleges are terrified of placement filters. Their resumes currently list generic college assignments (Calculator, Weather App, Todo List) that get instantly rejected by modern ATS scanners.
+        </p>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:12px;">
+          • <strong>Why They Care About 60 Minutes:</strong> Students suffer from tutorial fatigue. 6-month AI roadmaps cause high attrition. A crisp, guaranteed 60-minute build offers immediate dopamine: <em>"Walk away with a live cloud URL and a verifiable certificate before dinner."</em>
+        </p>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6;">
+          • <strong>Conversion Hook:</strong> "Build Your First AI Project in 60 Minutes. 100% Free with verified resume points." Zero price friction, extreme placement urgency.
+        </p>
+      `,
+      tab2: `
+        <h4 style="color:#d8b4fe; margin-bottom:8px; font-size:1.15rem;">🚀 3 High-Impact Channels & 7-Day Sprint</h4>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:10px;">
+          1. <strong>Class Representative (CR) & Placement Coordinator Infiltration (Target: 220):</strong> Direct outreach to 40 student placement heads on LinkedIn/WhatsApp with a standardized formal placement notice. WhatsApp forwards inside college sections have an 85%+ open rate.
+        </p>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:10px;">
+          2. <strong>Built-in Gamified Referral Flywheel (Target: 200):</strong> Immediately upon registering, students are prompted to invite 2 batchmates to unlock the GenAI Placement Interview PDF. Drives a viral coefficient K = 0.55.
+        </p>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6;">
+          3. <strong>Targeted Micro-Hubs (Target: 80):</strong> 4 micro-sponsorships across college Telegram and Instagram placement pages (₹250 each) announcing the live sprint.
+        </p>
+      `,
+      tab3: `
+        <h4 style="color:#d8b4fe; margin-bottom:8px; font-size:1.15rem;">💰 ₹2,000 Budget Breakdown & Unit Economics</h4>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin:14px 0;">
+          <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:10px;">
+            <div style="font-size:0.8rem; color:#aaa;">Referral Reward Pool</div>
+            <div style="font-size:1.3rem; font-weight:800; color:#fff;">₹1,000 (50%)</div>
+            <div style="font-size:0.75rem; color:#d8b4fe;">2 x ₹500 Amazon Vouchers for top referrers</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:10px;">
+            <div style="font-size:0.8rem; color:#aaa;">Micro-Creator Seeding</div>
+            <div style="font-size:1.3rem; font-weight:800; color:#fff;">₹1,000 (50%)</div>
+            <div style="font-size:0.75rem; color:#d8b4fe;">4 x ₹250 shoutouts on college tech pages</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:10px;">
+            <div style="font-size:0.8rem; color:#aaa;">Blended Cost per Lead</div>
+            <div style="font-size:1.3rem; font-weight:800; color:#22c55e;">₹4.00 / Lead</div>
+            <div style="font-size:0.75rem; color:#aaa;">₹2,000 / 500 Students</div>
+          </div>
+        </div>
+      `,
+      tab4: `
+        <h4 style="color:#d8b4fe; margin-bottom:8px; font-size:1.15rem;">🧠 Critical Thinking: What I Deliberately Rejected</h4>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:10px;">
+          • <strong>Rejected Paid Meta/Google Ads:</strong> EdTech CPL on Meta averages ₹40–₹80. A ₹2,000 budget would exhaust in ~40 leads (8% of goal). Replaced with student ambassador viral referral loops.
+        </p>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6; margin-bottom:10px;">
+          • <strong>Rejected 3-Day Hackathons:</strong> AI suggested hosting a weekend hackathon. Final-year students are overwhelmed with internal exams and major project submissions. A 60-minute single-sitting live build minimizes friction.
+        </p>
+        <p style="color:#ccc; font-size:0.9rem; line-height:1.6;">
+          • <strong>Rejected Mass Cold Emails to College Admin:</strong> Generic <code>tpo@college.edu</code> inboxes have near-zero open rates in a 7-day window. Targeted student placement coordinators directly on WhatsApp.
+        </p>
+      `
+    };
+
+    function openTab(tabKey, btnElement) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      document.getElementById('tabContentArea').innerHTML = strategyTabs[tabKey];
+    }
+
+    // 5. Modal Handlers
+    function openModal() {
+      document.getElementById('regModal').style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('regModal').style.display = 'none';
+    }
+    function handleRegistration(e) {
+      e.preventDefault();
+      alert("🎉 Registration confirmed! Your free seat is locked. Share your referral link with 2 classmates to unlock the AI Interview Prep PDF!");
+      closeModal();
+      document.getElementById('seatCounter').innerText = "419 / 500";
+      navigateTo('referral-engine');
+    }
+
+    // Initial Load Setup
+    window.onload = function() {
+      // Default to CSE
+      switchBranch('cse');
+      // Load initial strategy tab
+      document.getElementById('tabContentArea').innerHTML = strategyTabs.tab1;
+      // Pre-fill WhatsApp share link
+      const msg = encodeURIComponent("Hey! I just registered for NxtWave's free live workshop: 'Build Your First AI Project in 60 Mins' before final-year placements. Register here for free before the 500-seat limit fills: https://nxtwave.ai/workshop?ref=CAMPUS-HERO-2025");
+      document.getElementById('waShare').href = "https://api.whatsapp.com/send?text=" + msg;
+    };
+  </script>
+</body>
+</html>
